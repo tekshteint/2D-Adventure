@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -36,6 +37,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public Player player = new Player(this,keyH);
 	TileManager tileM = new TileManager(this);
 	public CollisionChecker collisionCheck = new CollisionChecker(this);
+	public ObjectManager objM = new ObjectManager(this); 
+	public SuperObject obj[] = new SuperObject[10]; //10 object slots. Display 10 objects at the same time but not limited to 10 total
+	
 		
 	GamePanel(){
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight)); //set the size of this class
@@ -43,8 +47,15 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setDoubleBuffered(true); //if set to true all the drawing from this component will be done in an offscreen painting buffer
 		this.addKeyListener(keyH);
 		this.setFocusable(true); //this gamepanel can be "focused" to recieve key input
+		
+		
 	}
 
+	public void setupGame() {
+		objM.setObject();
+	}
+	
+	
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
@@ -94,8 +105,21 @@ public class GamePanel extends JPanel implements Runnable{
 		 * control over geometry, coordinate transformations, color management,
 		 * and text layout
 		 */
+		
+		
 		tileM.draw(g2); //draw tiles first then player so they can be the background
+		
+		
+		for(int i = 0; i < obj.length; i++) {
+			if(obj[i] != null) {
+				obj[i].draw(g2, this);
+			}
+		}
+		
+		
 		player.draw(g2);
+		
+		
 		g2.dispose(); //disposes of this graphics context and release any system resources it uses
 		
 		

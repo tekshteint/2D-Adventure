@@ -19,6 +19,8 @@ public class Main {
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
 		
+		gamePanel.setupGame(); // gives objects their location on map
+		
 		gamePanel.startGameThread();
 	}
 

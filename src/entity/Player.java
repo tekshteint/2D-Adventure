@@ -1,13 +1,13 @@
 package entity;
 
 import java.awt.Color;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
-
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -22,6 +22,11 @@ public class Player extends Entity{
 	public final int screenX;
 	public final int screenY;
 	
+	int hasKey = 0;
+	int hasToken = 0;
+	Timer timer = new Timer();
+	int countDown = 3500; //timer for stat buff
+	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
 		this.keyH = keyH;
@@ -32,6 +37,8 @@ public class Player extends Entity{
 		solidArea = new Rectangle(8, 8, 20, 20); //player hitbox should be smaller than player size itself
 								//x, y, width, height
 		
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
 		
 		setDefaultValues();
 		getPlayerImage();
@@ -92,7 +99,12 @@ public class Player extends Entity{
 			collisionOn = false;
 			gp.collisionCheck.checkTile(this);
 			
-			//Collision checking
+			//Check obj collision
+			int objIndex = gp.collisionCheck.checkObject(this, true);
+			
+			pickUpObject(objIndex);
+			
+			//Collision checking tile
 			if (collisionOn == false) {
 				switch(direction) {
 				case "up":
@@ -129,6 +141,43 @@ public class Player extends Entity{
 			}
 		} else {
 			idle = true;
+		}
+		
+	}
+	
+	
+	public void pickUpObject(int i) {
+		if(i != 999) {
+			String objectName = gp.obj[i].name;
+			
+			switch(objectName) {
+			case "key":
+				hasKey++;
+				gp.obj[i] = null;
+				System.out.println("Keys: " + hasKey);
+				break;
+			case "door":
+				if (hasKey > 0) {
+					gp.obj[i] = null;
+					hasKey--;
+					System.out.println("Keys: " + hasKey);
+				}
+				break;
+			case "token":
+				hasToken++;
+				gp.obj[i] = null;
+				System.out.println("Tokens: " + hasToken);
+				speed += 2;
+				TimerTask task = new TimerTask() {
+
+					@Override
+					public void run() {
+						speed -= 2;
+					}
+				};
+				timer.schedule(task, countDown);
+				break;
+			}
 		}
 	}
 	
