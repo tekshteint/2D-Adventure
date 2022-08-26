@@ -33,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	KeyHandler keyH = new KeyHandler();
+	public Sound sound = new Sound();
 	Thread gameThread;
 	public Player player = new Player(this,keyH);
 	TileManager tileM = new TileManager(this);
@@ -53,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
 
 	public void setupGame() {
 		objM.setObject();
+		playMusic(0);
 	}
 	
 	
@@ -123,5 +125,20 @@ public class GamePanel extends JPanel implements Runnable{
 		g2.dispose(); //disposes of this graphics context and release any system resources it uses
 		
 		
+	}
+	
+	public void playMusic(int i) {
+		sound.setFile(i);
+		sound.play();
+		sound.loop();
+	}
+	
+	public void stopMusic() {
+		sound.stop();
+	}
+	
+	public void playSoundEffect(int i) {
+		sound.setFile(i);
+		sound.play();
 	}
 }
