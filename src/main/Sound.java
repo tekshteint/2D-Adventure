@@ -12,9 +12,9 @@ public class Sound {
 	
 	public Sound() {
 		soundURL[0] = getClass().getResource("/sounds/theme.wav");
-		soundURL[1] = getClass().getResource("/sounds/token.wav");
-		soundURL[2] = getClass().getResource("/sounds/powerup.wav");
-		soundURL[3] = getClass().getResource("/sounds/door.wav");
+		soundURL[1] = getClass().getResource("/sounds/sounds_token.wav");
+		soundURL[2] = getClass().getResource("/sounds/sounds_powerup.wav");
+		soundURL[3] = getClass().getResource("/sounds/sounds_door.wav");
 		
 	}
 	
@@ -22,7 +22,6 @@ public class Sound {
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
 			clip = AudioSystem.getClip();
-			System.out.println(clip.toString());
 			clip.open(ais);
 		} catch (Exception e) {
 			e.printStackTrace();
